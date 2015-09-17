@@ -30,6 +30,10 @@ This code was put together for the `ColdFusion: Code Security Best Practices` pr
 
 You can view this code live at https://tfa.vsgcom.net/
 
+## Other implementations
+
+* [Secure Authentication Example](https://github.com/ddspringle/framework-one-secure-auth)
+
 ## Bugs and Feature Requests
 
 If you find any bugs or have a feature you'd like to see implemented in this code, please use the issues area here on GitHub to log them.
