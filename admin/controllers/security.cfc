@@ -36,8 +36,10 @@ component {
     */  
     function authorize( rc ) {
 
+        var actionArr = [ 'main.default', 'main.authenticate', 'main.twofactor', 'main.authfactor' ];
+
         // check if we're already logging in
-        if( !find( 'main.default', rc.action ) AND !find( 'main.authenticate', rc.action ) AND !find( 'main.twofactor', rc.action ) AND !find( 'main.authfactor', rc.action ) ) {
+        if( !arrayFind( actionArr, rc.action )) {
 
             // we're not, check if the session cookie is defined
             if( !structKeyExists( cookie, application.cookieName ) ) {
