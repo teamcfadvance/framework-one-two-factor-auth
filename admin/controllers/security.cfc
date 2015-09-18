@@ -36,7 +36,7 @@ component {
     */  
     function authorize( rc ) {
 
-        var actionArr = [ 'main.default', 'main.authenticate', 'main.twofactor', 'main.authfactor' ];
+        var actionArr = [ 'admin:main.default', 'admin:main.authenticate', 'admin:main.twofactor', 'admin:main.authfactor' ];
 
         // check if we're already logging in
         if( !arrayFind( actionArr, rc.action )) {
