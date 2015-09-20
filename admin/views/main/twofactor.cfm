@@ -61,6 +61,9 @@
                     </div>
                     <div class="panel-body">
                         <form role="form" id="loginForm" action="<cfoutput>#buildURL( 'main.authfactor' )#</cfoutput>" method="POST" autocomplete="off">
+                            <cfoutput>
+                                <input type="hidden" id="token" name="token" value="#CSRFGenerateToken()#">
+                            </cfoutput>
                                 <div class="row">
                                     <div class="text-center">
                                         <p>Please enter your authorization code below.</p>
