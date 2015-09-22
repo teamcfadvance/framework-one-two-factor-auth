@@ -60,9 +60,9 @@
                         <strong>Secure Authentication Sign In &raquo; Second Factor</strong>
                     </div>
                     <div class="panel-body">
-                        <form role="form" id="loginForm" action="<cfoutput>#buildURL( 'main.authfactor' )#</cfoutput>" method="POST" autocomplete="off">
                             <cfoutput>
-                                <input type="hidden" id="token" name="token" value="#CSRFGenerateToken()#">
+                                <form role="form" id="loginForm" action="#buildURL( 'main.authfactor' )#" method="POST" autocomplete="off">
+                                <input type="hidden" name="f#application.securityService.uberHash( 'token', 'SHA-512', 1700 )#" value="#CSRFGenerateToken()#">
                             </cfoutput>
                                 <div class="row">
                                     <div class="text-center">

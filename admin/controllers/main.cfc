@@ -90,7 +90,7 @@ component accessors="true" {
 		}
 
 		// ensure the CSRF token is provided and valid
-		if( !structKeyExists( rc, 'token') OR !CSRFVerifyToken( rc.token ) ) {
+		if( !structKeyExists( rc, 'f' & application.securityService.uberHash( 'token', 'SHA-512', 1500 ) ) OR !CSRFVerifyToken( rc[ 'f' & application.securityService.uberHash( 'token', 'SHA-512', 1500 ) ] ) ) {
 			// it doesn't, redirect to the login page
 			variables.fw.redirect( action = 'main.default', queryString = 'msg=#urlEncodedFormat( '505: Your session has timed out. Please log in again to continue.' )#' );
 		}
@@ -163,7 +163,7 @@ component accessors="true" {
 		}
 
 		// ensure the CSRF token is provided and valid
-		if( !structKeyExists( rc, 'token') OR !CSRFVerifyToken( rc.token ) ) {
+		if( !structKeyExists( rc, 'f' & application.securityService.uberHash( 'token', 'SHA-512', 1700 ) ) OR !CSRFVerifyToken( rc[ 'f' & application.securityService.uberHash( 'token', 'SHA-512', 1700 ) ] ) ) {
 			// it doesn't, redirect to the login page
 			variables.fw.redirect( action = 'main.default', queryString = 'msg=#urlEncodedFormat( '510: Your session has timed out. Please log in again to continue.' )#' );
 		}
