@@ -77,7 +77,7 @@
                                                 <span class="input-group-addon">
                                                     <i class="glyphicon glyphicon-earphone"></i>
                                                 </span> 
-                                                <input class="form-control" placeholder="Authorization Code" name="twofactor" type="text" autocomplete="off" required autofocus>
+                                                <input class="form-control" placeholder="Authorization Code" name="twofactor" type="password" autocomplete="off" required autofocus>
                                             </div>
                                         </div>
                                         <div class="form-group">
