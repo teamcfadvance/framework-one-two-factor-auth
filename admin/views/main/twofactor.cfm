@@ -62,7 +62,7 @@
                     <div class="panel-body">
                             <cfoutput>
                                 <form role="form" id="loginForm" action="#buildURL( 'main.authfactor' )#" method="POST" autocomplete="off">
-                                <input type="hidden" name="f#application.securityService.uberHash( 'token', 'SHA-512', 1700 )#" value="#CSRFGenerateToken()#">
+                                <input type="hidden" name="f#application.securityService.uberHash( 'token', 'SHA-512', 1700 )#" value="#CSRFGenerateToken( forceNew = true )#">
                             </cfoutput>
                                 <div class="row">
                                     <div class="text-center">
