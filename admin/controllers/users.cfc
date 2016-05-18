@@ -1,7 +1,7 @@
 component accessors="true" {
 
-    property userService;
-    //property mailService;
+	property userService;
+	//property mailService;
 
 	public any function init( fw ) {
 		variables.fw = fw;

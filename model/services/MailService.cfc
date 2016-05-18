@@ -30,5 +30,4 @@ component displayname="mailService" accessors="true"  {
 
 	}
 
-
 }

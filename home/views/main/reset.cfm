@@ -1,4 +1,3 @@
-<cfparam name="rc.msg" default="">
 	<div class="row">
 		<div class="col-md-12"><h1>Two-Factor Auth Example</h1></div>
 	</div>
@@ -7,18 +6,18 @@
 	</div>
 	<div class="row">
 		<div class="col-md-4">
-			<cfif len( rc.msg )>
-				<cfif !find( left( rc.msg, 3), '200')>
-	                <div class="alert alert-danger alert-dismissable">
-	                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-	                    <i class="fa fa-exclamation-triangle"></i> <cfoutput>#urlDecode( rc.msg )#</cfoutput>
-	                </div>
-                <cfelse>
-	                <div class="alert alert-success alert-dismissable">
-	                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-	                    <i class="fa fa-info-circle"></i> <cfoutput>#urlDecode( rc.msg )#</cfoutput>
-	                </div>
-                </cfif>
+			<cfif rc.msg>
+				<cfif !rc.msg eq 200>
+					<div class="alert alert-danger alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<i class="fa fa-exclamation-triangle"></i> <cfoutput>#encodeForHtml( rc.message )#</cfoutput>
+					</div>
+				<cfelse>
+					<div class="alert alert-success alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<i class="fa fa-info-circle"></i> <cfoutput>#encodeForHtml( rc.message )#</cfoutput>
+					</div>
+				</cfif>
 			</cfif>
 			<div class="panel panel-warning">
 				<div class="panel-heading">
@@ -29,7 +28,7 @@
 				<div class="panel-body">
 					<p>If you have forgotten your password, use this form to have a new system generated password emailed to you.</p>					
 					<cfoutput><form role="form" action="#buildUrl( 'main.resetpass' )#" method="POST"></cfoutput>
-						<div class="form-group">							 
+						<div class="form-group">
 							<label for="username">
 								Email address
 							</label>

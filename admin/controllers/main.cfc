@@ -16,7 +16,7 @@ component accessors="true" {
 	* @displayname init
 	* @description I am the constructor method for main
 	* @return 	   this
-	*/	
+	*/
 	public any function init( fw ) {
 		variables.fw = fw;
 		return this;
@@ -25,25 +25,19 @@ component accessors="true" {
 	/**
 	* @displayname default
 	* @description I clear session data and present the login view
-	*/	
+	*/
 	public void function default( rc ) {
 
 		// disable the admin layout since the login page has it's own html
 		variables.fw.disableLayout();
-        
-        // set a zero session cookie when hitting the login page (federate the login)
-        getPageContext().getResponse().addHeader("Set-Cookie", "#application.cookieName#=0;path=/;domain=.#CGI.HTTP_HOST#;HTTPOnly");
+		
+		// set a zero session cookie when hitting the login page (federate the login)
+		getPageContext().getResponse().addHeader("Set-Cookie", "#application.cookieName#=0;path=/;domain=.#CGI.HTTP_HOST#;HTTPOnly");
 
-        // lock and clear the sessionObj
-		lock scope='session' timeout='10' {			
-            session.sessionObj = createObject( 'component', 'model.beans.Session').init();
+		// lock and clear the sessionObj
+		lock scope='session' timeout='10' {
+			session.sessionObj = createObject( 'component', 'model.beans.Session').init();
 		}
-
-		// get a hash for use in preventing password disclosure
-		rc.heartbeat = application.securityService.getHeartbeat();
-
-		// set a null message string
-		rc.message = '';
 
 		// check for the existence of the 'msg' url paramter
 		if( structKeyExists( rc, 'msg' ) ) {
@@ -63,14 +57,23 @@ component accessors="true" {
 			} else {
 				rc.message = 'Your session has timed out. Please log in again to continue.';
 			}
+		// if it doesn't exist
+		} else {
+			// create it
+			rc.msg = 0;
+			// and set a null message string
+			rc.message = '';
 		}
+
+		// set a title for the login page to render
+		rc.title = 'Two-Factor Authentication Sign In';
 
 	}
 
-    /**
-    * @displayname dashboard
-    * @description I present the dashbaord view
-    */ 
+	/**
+	* @displayname dashboard
+	* @description I present the dashbaord view
+	*/
 	public void function dashboard( rc ) {
 
 		rc.product = server.coldfusion.productname;
@@ -78,7 +81,7 @@ component accessors="true" {
 		if( findNoCase( 'lucee', rc.product ) ) {
 			rc.version = server.lucee.version;
 		} else if( findNoCase( 'railo', rc.product ) ) {
-			rc.version = server.railo.version;			
+			rc.version = server.railo.version;
 		} else {
 			rc.version = listFirst( server.coldfusion.productversion );
 		}
@@ -88,7 +91,7 @@ component accessors="true" {
 	/**
 	* @displayname authenticate
 	* @description I authenticate a user login and redirect to the dashboard view if valid
-	*/	
+	*/
 	public void function authenticate( rc ) {
 
 		var qGetUser = '';
@@ -97,13 +100,13 @@ component accessors="true" {
 		// check if the host and referrer match (federate the login)
 		if( !findNoCase( CGI.HTTP_HOST, CGI.HTTP_REFERER ) ) {
 			// they don't, redirect to the login page
-			variables.fw.redirect( action = 'main.default', queryString = 'msg=503' );		
+			variables.fw.redirect( action = 'main.default', queryString = 'msg=503' );
 		}
 
 		// check if the session cookie exists (federate the login)
 		if( !structKeyExists( cookie, application.cookieName ) ) {
 			// it doesn't, redirect to the login page
-			variables.fw.redirect( action = 'main.default', queryString = 'msg=504' );			
+			variables.fw.redirect( action = 'main.default', queryString = 'msg=504' );
 		}
 
 		// ensure a username and password were sent
@@ -113,7 +116,7 @@ component accessors="true" {
 		}
 
 		// ensure the CSRF token is provided and valid
-		if( !structKeyExists( rc, 'f' & application.securityService.uberHash( 'token', 'SHA-512', 1500 ) ) OR !CSRFVerifyToken( rc[ 'f' & application.securityService.uberHash( 'token', 'SHA-512', 1500 ) ] ) ) {
+		if( !structKeyExists( rc, 'f' & application.securityService.uberHash( 'token', 'SHA-512', 150 ) ) OR !CSRFVerifyToken( rc[ 'f' & application.securityService.uberHash( 'token', 'SHA-512', 150 ) ] ) ) {
 			// it doesn't, redirect to the login page
 			variables.fw.redirect( action = 'main.default', queryString = 'msg=505' );
 		}
@@ -156,9 +159,9 @@ component accessors="true" {
 		mailService.sendMfaCode( phone = application.securityService.dataDec( qGetUser.phone, 'db' ), providerEmail = variables.smsProviderService.getSmsProviderById( qGetUser.providerId ).getEmail(), mfaCode = session.sessionObj.getMfaCode() );
 
 		// set the session cookie with the new encrypted session id
-        getPageContext().getResponse().addHeader("Set-Cookie", "#application.cookieName#=#application.securityService.setSessionIdForCookie( session.sessionObj.getSessionId() )#;path=/;domain=.#CGI.HTTP_HOST#;HTTPOnly");
+		getPageContext().getResponse().addHeader("Set-Cookie", "#application.cookieName#=#application.securityService.setSessionIdForCookie( session.sessionObj.getSessionId() )#;path=/;domain=.#CGI.HTTP_HOST#;HTTPOnly");
 
-        // and go to the twofactor view
+		// and go to the twofactor view
 		variables.fw.redirect( 'main.twofactor' );
 
 	}
@@ -166,23 +169,26 @@ component accessors="true" {
 	/**
 	* @displayname twofactor
 	* @description I present the two-factor view
-	*/	
+	*/
 	public void function twofactor( rc ) {
 
 		// disable the admin layout since the two-factor page has it's own html
 		variables.fw.disableLayout();
+
+		// set a title for the login page to render
+		rc.title = 'Two-Factor Authentication Sign In &raquo; Second Factor';
 
 	}
 
 	/**
 	* @displayname authfactor
 	* @description I authenticate the second factor
-	*/	
+	*/
 	public void function authfactor( rc ) {
 
 		if( !structKeyExists( rc, 'twofactor' ) OR !len( rc.twofactor ) ) {
 			// they don't match, redirect to the login page
-			variables.fw.redirect( action = 'main.default', queryString = 'msg=410' );			
+			variables.fw.redirect( action = 'main.default', queryString = 'msg=410' );
 		}
 
 		// ensure the CSRF token is provided and valid
@@ -192,7 +198,7 @@ component accessors="true" {
 		}
 
 		if( compareNoCase( rc.twofactor, session.sessionObj.getMfaCode() ) NEQ 0 ) {
-			variables.fw.redirect( action = 'main.default', queryString = 'msg=411' );	
+			variables.fw.redirect( action = 'main.default', queryString = 'msg=411' );
 		}
 
 		// lock the session scope and create a sessionObj for this user
@@ -201,7 +207,7 @@ component accessors="true" {
 			session.sessionObj.setIsAuthenticated( true );
 		}
 
-        // and go to the dashboard view
+		// and go to the dashboard view
 		variables.fw.redirect( 'main.dashboard' );
 
 	}
@@ -209,21 +215,21 @@ component accessors="true" {
 	/**
 	* @displayname logout
 	* @description I clear session data and present the login view
-	*/	
+	*/
 	public void function logout( rc ) {
 
 		// clear the users session object from cache
 		application.securityService.clearUserSession( session.sessionObj );
 
-        // lock and clear the sessionObj
-		lock scope='session' timeout='10' {			
-            session.sessionObj = createObject( 'component', 'model.beans.Session').init();
+		// lock and clear the sessionObj
+		lock scope='session' timeout='10' {
+			session.sessionObj = createObject( 'component', 'model.beans.Session').init();
 		}
 
-        // set a zero session cookie when hitting the login page (federate the login)
-        getPageContext().getResponse().addHeader("Set-Cookie", "#application.cookieName#=0;path=/;domain=.#CGI.HTTP_HOST#;HTTPOnly");
+		// set a zero session cookie when hitting the login page (federate the login)
+		getPageContext().getResponse().addHeader("Set-Cookie", "#application.cookieName#=0;path=/;domain=.#CGI.HTTP_HOST#;HTTPOnly");
 
-        // go to the login page
+		// go to the login page
 		variables.fw.redirect( action = 'main.default', queryString = 'msg=200' );
 
 	}
