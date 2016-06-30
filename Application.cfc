@@ -9,7 +9,7 @@
 component extends="framework.one" {
 
 	this.name = "two_factor_auth";
-	this.applicationTimeout = CreateTimeSpan(0, 0, 0, 5);
+	this.applicationTimeout = CreateTimeSpan(30, 0, 0, 0);
 	this.sessionManagement = true;
 	this.sessionTimeout = CreateTimeSpan(0, 0, 30, 0); // 30 minutes
 	this.datasource = 'twofactorauth';
