@@ -1,0 +1,26 @@
+{
+    "name" : "framework-one-two-factor-auth",
+    "slug" : "fw1-tfa",
+    "version" : "1.0.42",
+    "author" : "Denard Springle <denard.springle@gmail.com>",
+    "location" : "https://github.com/ddspringle/framework-one-two-factor-auth/archive/master.zip",
+    "Homepage" : "https://github.com/ddspringle/framework-one-two-factor-auth",
+    "Documentation" : "https://github.com/ddspringle/framework-one-two-factor-auth",
+    "Repository" : { 
+        "type" : "git", "URL" : "https://github.com/ddspringle/framework-one-two-factor-auth.git"
+    },
+    "Bugs" : "https://github.com/ddspringle/framework-one-two-factor-auth/issues",
+    "shortDescription" : "An example fw/1 application with two-factor authentication and session management functions",
+    "changelog" : "https://github.com/ddspringle/framework-one-two-factor-auth/commits/master",
+    "type" : "projects",
+    "keywords" : [ "fw1", "framework one", "mvc", "authentication" ],
+    "engines" : [
+        { "type" : "railo", "version" : ">=4.1.x" },
+        { "type" : "lucee", "version" : ">=4.5.x" },
+        { "type" : "adobe", "version" : ">=10.0.0" }
+    ],
+    "defaultEngine" : "lucee",
+    "License" : [
+        { "type" : "Apache 2.0", "URL" : "http://www.apache.org/licenses/LICENSE-2.0" }
+    ]
+}
