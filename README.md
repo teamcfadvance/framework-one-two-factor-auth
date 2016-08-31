@@ -35,7 +35,7 @@ This code was put together for the `ColdFusion: Code Security Best Practices` pr
 
 ## Demo
 
-You can view this code live at https://tfa.vsgcom.net/
+**NOTE:** Demo servers are down temporarily [You can view this code live at https://tfa.vsgcom.net/]
 
 ## Other implementations
 
